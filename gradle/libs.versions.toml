@@ -1,18 +1,25 @@
 [versions]
 agp = "8.5.2"
 kotlin = "1.9.0"
+
 coreKtx = "1.13.1"
-junit = "4.13.2"
-junitVersion = "1.2.1"
-espressoCore = "3.6.1"
 appcompat = "1.7.0"
 material = "1.12.0"
 activity = "1.9.2"
 constraintlayout = "2.1.4"
 
+junit = "4.13.2"
+junitVersion = "1.2.1"
+espressoCore = "3.6.1"
+
+# rxJava & rxAndroid
+rxandroid = "2.1.1"
+rxjava = "2.2.21"
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+android-library = { id = "com.android.library", version.ref = "agp" }
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -23,3 +30,7 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+
+# rxJava & rxAndroid
+rxandroid = { module = "io.reactivex.rxjava2:rxandroid", version.ref = "rxandroid" }
+rxjava = { module = "io.reactivex.rxjava2:rxjava", version.ref = "rxjava" }

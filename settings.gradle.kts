@@ -21,3 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "CropView"
 include(":app")
+include(":cropView")

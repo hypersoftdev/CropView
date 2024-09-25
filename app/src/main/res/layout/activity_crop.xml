@@ -5,6 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorBackground"
     tools:context=".ActivityCrop">
 
     <com.google.android.material.button.MaterialButton
@@ -14,18 +15,61 @@
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         app:icon="@drawable/ic_back"
+        app:iconTint="@android:color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.imageview.ShapeableImageView
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/mtvWidthCrop"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="4dp"
+        android:background="@color/colorBackgroundSurface"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/mbBackCrop"
+        app:layout_constraintEnd_toStartOf="@+id/mtvHeightCrop"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/mbBackCrop"
+        tools:text="W 500" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/mtvHeightCrop"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="4dp"
+        android:background="@color/colorBackgroundSurface"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/mbBackCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/mtvWidthCrop"
+        app:layout_constraintTop_toTopOf="@+id/mbBackCrop"
+        tools:text="H 500" />
+
+    <dev.pegasus.crop.CropView
         android:id="@+id/sivImageCrop"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginVertical="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/rcvListCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mbBackCrop"
         tools:src="@tools:sample/avatars" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcvListCrop"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingVertical="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
