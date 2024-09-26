@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ActivityCrop">
+    tools:context=".crop.ActivityCrop">
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/mbBackCrop"
@@ -48,6 +48,16 @@
         app:layout_constraintStart_toEndOf="@+id/mtvWidthCrop"
         app:layout_constraintTop_toTopOf="@+id/mbBackCrop"
         tools:text="H 500" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/mbSaveCrop"
+        style="@style/Widget.Material3.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="@string/save"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <dev.pegasus.crop.CropView
         android:id="@+id/crop_view"

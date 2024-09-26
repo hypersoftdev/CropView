@@ -486,9 +486,7 @@ class CropView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
         }
 
         bitmap?.let {
-            val croppedBitmap = Bitmap.createBitmap(
-                it, cropLeft, cropTop, cropRight - cropLeft, cropBottom - cropTop
-            )
+            val croppedBitmap = Bitmap.createBitmap(it, cropLeft, cropTop, cropRight - cropLeft, cropBottom - cropTop)
             return CroppedBitmapData(croppedBitmap = croppedBitmap)
         }
 

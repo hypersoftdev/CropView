@@ -1,12 +1,16 @@
-package com.sample.cropview
+package com.sample.cropview.crop
 
+import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.RectF
 import android.net.Uri
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
+import com.sample.cropview.ViewModelCrop
 import com.sample.cropview.base.BaseActivity
 import com.sample.cropview.databinding.ActivityCropBinding
+import com.sample.cropview.result.ActivityResult
 
 class ActivityCrop : BaseActivity<ActivityCropBinding>(ActivityCropBinding::inflate) {
 
@@ -20,6 +24,7 @@ class ActivityCrop : BaseActivity<ActivityCropBinding>(ActivityCropBinding::infl
         initObservers()
 
         binding.mbBackCrop.setOnClickListener { finish() }
+        binding.mbSaveCrop.setOnClickListener { saveImage() }
     }
 
     private fun setUI() {
@@ -52,4 +57,14 @@ class ActivityCrop : BaseActivity<ActivityCropBinding>(ActivityCropBinding::infl
             Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
         }
     }
+
+    private fun saveImage() {
+        bitmap = binding.cropView.getCroppedData().croppedBitmap
+        startActivity(Intent(this, ActivityResult::class.java))
+    }
+
+    companion object {
+        var bitmap: Bitmap? = null
+    }
+
 }
