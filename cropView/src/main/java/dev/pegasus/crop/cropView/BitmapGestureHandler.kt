@@ -14,7 +14,6 @@ import android.view.ScaleGestureDetector
  *     -> linkedin.com/in/epegasus
  */
 
-
 class BitmapGestureHandler(context: Context, private val bitmapGestureListener: BitmapGestureListener) {
 
     interface BitmapGestureListener {
@@ -47,7 +46,6 @@ class BitmapGestureHandler(context: Context, private val bitmapGestureListener: 
     }
 
     private val scaleListener = object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
-
         override fun onScaleEnd(detector: ScaleGestureDetector) {
             super.onScaleEnd(detector)
             bitmapGestureListener.onEnd()

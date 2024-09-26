@@ -1,5 +1,6 @@
 package dev.pegasus.crop
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -15,11 +16,11 @@ import android.view.MotionEvent.ACTION_MOVE
 import android.view.MotionEvent.ACTION_UP
 import android.view.View
 import androidx.core.content.ContextCompat
-import com.lyrebirdstudio.aspectratiorecyclerviewlib.aspectratio.model.AspectRatio
-import com.lyrebirdstudio.aspectratiorecyclerviewlib.aspectratio.model.AspectRatio.ASPECT_FREE
-import dev.pegasus.crop.cropview.AspectMode.ASPECT
-import dev.pegasus.crop.cropview.AspectMode.FREE
-import dev.pegasus.crop.main.CroppyTheme
+import dev.pegasus.crop.aspectRatio.model.AspectRatio
+import dev.pegasus.crop.cropView.AspectMode
+import dev.pegasus.crop.cropView.AspectMode.ASPECT
+import dev.pegasus.crop.cropView.AspectMode.FREE
+import dev.pegasus.crop.cropView.BitmapGestureHandler
 import dev.pegasus.crop.ui.CroppedBitmapData
 import dev.pegasus.crop.util.extensions.animateScaleToPoint
 import dev.pegasus.crop.util.extensions.animateTo
@@ -56,13 +57,7 @@ import kotlin.math.roundToInt
  *     -> linkedin.com/in/epegasus
  */
 
-
-
-class CropView @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
-) : View(context, attrs, defStyleAttr) {
+class CropView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : View(context, attrs, defStyleAttr) {
 
     var onInitialized: (() -> Unit)? = null
 
@@ -78,20 +73,18 @@ class CropView @JvmOverloads constructor(
     /**
      * Main rect which is drawn to canvas.
      */
-    private val cropRect: AnimatableRectF =
-        AnimatableRectF()
+    private val cropRect: AnimatableRectF = AnimatableRectF()
 
     /**
      * Temporary rect to animate crop rect to.
      * This value will be set to zero after using.
      */
-    private val targetRect: AnimatableRectF =
-        AnimatableRectF()
+    private val targetRect: AnimatableRectF = AnimatableRectF()
 
     /**
-     * Minimum scale limitation is dependens on screen
+     * Minimum scale limitation is dependents on screen
      * and bitmap size. bitmapMinRect is calculated
-     * initially. This value holds the miminum rectangle
+     * initially. This value holds the minimum rectangle
      * which bitmapMatrix can be.
      */
     private val bitmapMinRect = RectF()
@@ -155,15 +148,14 @@ class CropView @JvmOverloads constructor(
     /**
      * Default margin for cropRect.
      */
-    private val marginInPixelSize =
-        resources.getDimensionPixelSize(R.dimen.margin_max_crop_rect).toFloat()
+    private val marginInPixelSize = resources.getDimensionPixelSize(R.dimen.margin_max_crop_rect).toFloat()
 
     /**
      * Aspect ratio matters for calculation.
      * It can be ASPECT_FREE or ASPECT_X_X. Default
      * value is ASPECT_FREE
      */
-    private var selectedAspectRatio = ASPECT_FREE
+    private var selectedAspectRatio = AspectRatio.ASPECT_FREE
 
     /**
      * Aspect mode (FREE or ASPECT)
@@ -241,9 +233,7 @@ class CropView @JvmOverloads constructor(
 
     private val bitmapGestureListener = object : BitmapGestureHandler.BitmapGestureListener {
         override fun onDoubleTap(motionEvent: MotionEvent) {
-
             if (isBitmapScaleExceedMaxLimit(DOUBLE_TAP_SCALE_FACTOR)) {
-
                 val resetMatrix = Matrix()
                 val scale = max(
                     cropRect.width() / bitmapRect.width(),
@@ -259,7 +249,6 @@ class CropView @JvmOverloads constructor(
                     notifyCropRectChanged()
                     invalidate()
                 }
-
                 return
             }
 
@@ -323,7 +312,16 @@ class CropView @JvmOverloads constructor(
     init {
         setWillNotDraw(false)
         setLayerType(LAYER_TYPE_HARDWARE, null)
-        setBackgroundColor(ContextCompat.getColor(context, R.color.colorCropBackground))
+
+        // Obtain the custom attributes
+        context.theme.obtainStyledAttributes(attrs, R.styleable.CropView, 0, 0).apply {
+            try {
+                val defBackgroundColor = ContextCompat.getColor(context, R.color.colorCropBackground)
+                setBackgroundColor(getColor(R.styleable.CropView_cropBackgroundColor, defBackgroundColor))
+            } finally {
+                recycle()
+            }
+        }
     }
 
     /**
@@ -337,6 +335,7 @@ class CropView @JvmOverloads constructor(
     /**
      * Handles touches
      */
+    @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         if (event == null) {
             return false
@@ -445,10 +444,12 @@ class CropView @JvmOverloads constructor(
         invalidate()
     }
 
+    /*
+    Commented Code
     fun setTheme(croppyTheme: CroppyTheme) {
         cornerTogglePaint.color = ContextCompat.getColor(context, croppyTheme.accentColor)
         invalidate()
-    }
+    }*/
 
     /**
      * Get cropped bitmap.
@@ -503,7 +504,7 @@ class CropView @JvmOverloads constructor(
         this.selectedAspectRatio = aspectRatio
 
         aspectAspectMode = when (aspectRatio) {
-            ASPECT_FREE -> FREE
+            AspectRatio.ASPECT_FREE -> FREE
             else -> ASPECT
         }
 
@@ -528,7 +529,6 @@ class CropView @JvmOverloads constructor(
      * Initialize
      */
     private fun initialize() {
-
         viewWidth = measuredWidth.toFloat() - (marginInPixelSize * 2)
 
         viewHeight = measuredHeight.toFloat() - (marginInPixelSize * 2)
@@ -688,7 +688,7 @@ class CropView @JvmOverloads constructor(
         val widthRatio: Float
         val heightRatio: Float
 
-        if (selectedAspectRatio == ASPECT_FREE) {
+        if (selectedAspectRatio == AspectRatio.ASPECT_FREE) {
             widthRatio = bitmapRect.width() / min(bitmapRect.width(), bitmapRect.height())
             heightRatio = bitmapRect.height() / min(bitmapRect.width(), bitmapRect.height())
         } else {
@@ -1219,7 +1219,7 @@ class CropView @JvmOverloads constructor(
                     }
 
                     DraggingState.DraggingBitmap -> {}
-                    DraggingState.Idle ->  {}
+                    DraggingState.Idle -> {}
                 }
 
             }
