@@ -1,7 +1,7 @@
-package com.sample.cropview.result
+package com.sample.cropview.ui.result
 
-import com.sample.cropview.base.BaseActivity
-import com.sample.cropview.crop.ActivityCrop
+import com.sample.cropview.ui.base.BaseActivity
+import com.sample.cropview.ui.crop.ActivityCrop
 import com.sample.cropview.databinding.ActivityResultBinding
 
 class ActivityResult : BaseActivity<ActivityResultBinding>(ActivityResultBinding::inflate) {

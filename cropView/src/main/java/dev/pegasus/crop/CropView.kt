@@ -16,7 +16,7 @@ import android.view.MotionEvent.ACTION_MOVE
 import android.view.MotionEvent.ACTION_UP
 import android.view.View
 import androidx.core.content.ContextCompat
-import dev.pegasus.crop.aspectRatio.model.AspectRatio
+import dev.pegasus.crop.aspectRatio.model.AspectRatioType
 import dev.pegasus.crop.cropView.AspectMode
 import dev.pegasus.crop.cropView.AspectMode.ASPECT
 import dev.pegasus.crop.cropView.AspectMode.FREE
@@ -155,7 +155,7 @@ class CropView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
      * It can be ASPECT_FREE or ASPECT_X_X. Default
      * value is ASPECT_FREE
      */
-    private var selectedAspectRatio = AspectRatio.ASPECT_FREE
+    private var selectedAspectRatioType = AspectRatioType.ASPECT_FREE
 
     /**
      * Aspect mode (FREE or ASPECT)
@@ -498,11 +498,11 @@ class CropView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
      * call aspectRatioChanged() method to do calculations
      * and animations from current editState.
      */
-    fun setAspectRatio(aspectRatio: AspectRatio) {
-        this.selectedAspectRatio = aspectRatio
+    fun setAspectRatio(aspectRatioType: AspectRatioType) {
+        this.selectedAspectRatioType = aspectRatioType
 
-        aspectAspectMode = when (aspectRatio) {
-            AspectRatio.ASPECT_FREE -> FREE
+        aspectAspectMode = when (aspectRatioType) {
+            AspectRatioType.ASPECT_FREE -> FREE
             else -> ASPECT
         }
 
@@ -686,12 +686,12 @@ class CropView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
         val widthRatio: Float
         val heightRatio: Float
 
-        if (selectedAspectRatio == AspectRatio.ASPECT_FREE) {
+        if (selectedAspectRatioType == AspectRatioType.ASPECT_FREE) {
             widthRatio = bitmapRect.width() / min(bitmapRect.width(), bitmapRect.height())
             heightRatio = bitmapRect.height() / min(bitmapRect.width(), bitmapRect.height())
         } else {
-            widthRatio = selectedAspectRatio.widthRatio
-            heightRatio = selectedAspectRatio.heightRatio
+            widthRatio = selectedAspectRatioType.widthRatio
+            heightRatio = selectedAspectRatioType.heightRatio
         }
 
         val aspectRatio = widthRatio / heightRatio
@@ -826,7 +826,7 @@ class CropView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
 
                         val differenceWidth = (cropRect.getHypotenus() - motionHypo) / 2
                         val differenceHeight =
-                            selectedAspectRatio.heightRatio * differenceWidth / selectedAspectRatio.widthRatio
+                            selectedAspectRatioType.heightRatio * differenceWidth / selectedAspectRatioType.widthRatio
 
                         cropRect.setTop(cropRect.top + differenceHeight)
                         cropRect.setRight(cropRect.right - differenceWidth)
@@ -845,7 +845,7 @@ class CropView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
 
                         val differenceWidth = (cropRect.getHypotenus() - motionHypo) / 2
                         val differenceHeight =
-                            selectedAspectRatio.heightRatio * differenceWidth / selectedAspectRatio.widthRatio
+                            selectedAspectRatioType.heightRatio * differenceWidth / selectedAspectRatioType.widthRatio
 
                         cropRect.setTop(cropRect.top + differenceHeight)
                         cropRect.setLeft(cropRect.left + differenceWidth)
@@ -863,7 +863,7 @@ class CropView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
 
                         val differenceWidth = (cropRect.getHypotenus() - motionHypo) / 2
                         val differenceHeight =
-                            selectedAspectRatio.heightRatio * differenceWidth / selectedAspectRatio.widthRatio
+                            selectedAspectRatioType.heightRatio * differenceWidth / selectedAspectRatioType.widthRatio
 
                         cropRect.setBottom(cropRect.bottom - differenceHeight)
                         cropRect.setRight(cropRect.right - differenceWidth)
@@ -882,7 +882,7 @@ class CropView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
 
                         val differenceWidth = (cropRect.getHypotenus() - motionHypo) / 2
                         val differenceHeight =
-                            selectedAspectRatio.heightRatio * differenceWidth / selectedAspectRatio.widthRatio
+                            selectedAspectRatioType.heightRatio * differenceWidth / selectedAspectRatioType.widthRatio
 
                         cropRect.setBottom(cropRect.bottom - differenceHeight)
                         cropRect.setLeft(cropRect.left + differenceWidth)
@@ -920,7 +920,7 @@ class CropView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
                     LEFT -> {
                         val differenceWidth = motionEvent.x - cropRect.left
                         val differenceHeight =
-                            selectedAspectRatio.heightRatio * differenceWidth / selectedAspectRatio.widthRatio
+                            selectedAspectRatioType.heightRatio * differenceWidth / selectedAspectRatioType.widthRatio
                         cropRect.setLeft(cropRect.left + differenceWidth)
                         cropRect.setTop(cropRect.top + differenceHeight / 2f)
                         cropRect.setBottom(cropRect.bottom - differenceHeight / 2f)
@@ -929,7 +929,7 @@ class CropView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
                     TOP -> {
                         val differenceHeight = motionEvent.y - cropRect.top
                         val differenceWidth =
-                            selectedAspectRatio.widthRatio * differenceHeight / selectedAspectRatio.heightRatio
+                            selectedAspectRatioType.widthRatio * differenceHeight / selectedAspectRatioType.heightRatio
                         cropRect.setTop(cropRect.top + differenceHeight)
                         cropRect.setLeft(cropRect.left + differenceWidth / 2f)
                         cropRect.setRight(cropRect.right - differenceWidth / 2f)
@@ -938,7 +938,7 @@ class CropView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
                     RIGHT -> {
                         val differenceWidth = cropRect.right - motionEvent.x
                         val differenceHeight =
-                            selectedAspectRatio.heightRatio * differenceWidth / selectedAspectRatio.widthRatio
+                            selectedAspectRatioType.heightRatio * differenceWidth / selectedAspectRatioType.widthRatio
                         cropRect.setRight(cropRect.right - differenceWidth)
                         cropRect.setTop(cropRect.top + differenceHeight / 2f)
                         cropRect.setBottom(cropRect.bottom - differenceHeight / 2f)
@@ -947,7 +947,7 @@ class CropView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
                     BOTTOM -> {
                         val differenceHeight = cropRect.bottom - motionEvent.y
                         val differenceWidth =
-                            selectedAspectRatio.widthRatio * differenceHeight / selectedAspectRatio.heightRatio
+                            selectedAspectRatioType.widthRatio * differenceHeight / selectedAspectRatioType.heightRatio
                         cropRect.setBottom(cropRect.bottom - differenceHeight)
                         cropRect.setLeft(cropRect.left + differenceWidth / 2f)
                         cropRect.setRight(cropRect.right - differenceWidth / 2f)

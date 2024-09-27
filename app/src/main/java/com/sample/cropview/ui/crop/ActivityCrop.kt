@@ -1,4 +1,4 @@
-package com.sample.cropview.crop
+package com.sample.cropview.ui.crop
 
 import android.content.Intent
 import android.graphics.Bitmap
@@ -7,13 +7,15 @@ import android.net.Uri
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
-import com.sample.cropview.ViewModelCrop
-import com.sample.cropview.base.BaseActivity
 import com.sample.cropview.databinding.ActivityCropBinding
-import com.sample.cropview.result.ActivityResult
+import com.sample.cropview.helpers.adapter.AdapterAspectRatio
+import com.sample.cropview.ui.base.BaseActivity
+import com.sample.cropview.ui.result.ActivityResult
+import dev.pegasus.crop.aspectRatio.model.AspectRatioType
 
 class ActivityCrop : BaseActivity<ActivityCropBinding>(ActivityCropBinding::inflate) {
 
+    private val adapterAspectRatio by lazy { AdapterAspectRatio(itemClick) }
     private val viewModel by viewModels<ViewModelCrop>()
 
     private val uriPath by lazy { intent.getStringExtra("uriPath") }
@@ -22,6 +24,7 @@ class ActivityCrop : BaseActivity<ActivityCropBinding>(ActivityCropBinding::infl
         setUI()
         initCropView()
         initObservers()
+        initRecyclerView()
 
         binding.mbBackCrop.setOnClickListener { finish() }
         binding.mbSaveCrop.setOnClickListener { saveImage() }
@@ -49,6 +52,9 @@ class ActivityCrop : BaseActivity<ActivityCropBinding>(ActivityCropBinding::infl
     }
 
     private fun initObservers() {
+        viewModel.aspectRatioLiveData.observe(this) {
+            adapterAspectRatio.submitList(it)
+        }
         viewModel.bitmapLiveData.observe(this) {
             binding.progressBar.visibility = View.GONE
             binding.cropView.setBitmap(it)
@@ -58,13 +64,21 @@ class ActivityCrop : BaseActivity<ActivityCropBinding>(ActivityCropBinding::infl
         }
     }
 
+    private fun initRecyclerView() {
+        binding.rcvListCrop.adapter = adapterAspectRatio
+    }
+
     private fun saveImage() {
         bitmap = binding.cropView.getCroppedData().croppedBitmap
         startActivity(Intent(this, ActivityResult::class.java))
     }
 
+    private val itemClick: (AspectRatioType) -> Unit = {
+        binding.cropView.setAspectRatio(it)
+        viewModel.itemRatioSelection(it)
+    }
+
     companion object {
         var bitmap: Bitmap? = null
     }
-
 }

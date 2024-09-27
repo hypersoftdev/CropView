@@ -1,4 +1,4 @@
-package com.sample.cropview.base
+package com.sample.cropview.ui.base
 
 import android.os.Bundle
 import android.util.Log

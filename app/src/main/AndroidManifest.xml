@@ -13,11 +13,11 @@
         android:theme="@style/Theme.CropView"
         tools:targetApi="31" >
         <activity
-            android:name=".result.ActivityResult"
+            android:name=".ui.result.ActivityResult"
             android:exported="false"
             android:theme="@style/Theme.CropView" />
         <activity
-            android:name=".crop.ActivityCrop"
+            android:name=".ui.crop.ActivityCrop"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

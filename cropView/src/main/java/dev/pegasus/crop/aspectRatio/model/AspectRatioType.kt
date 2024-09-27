@@ -8,7 +8,7 @@ package dev.pegasus.crop.aspectRatio.model
  *     -> linkedin.com/in/epegasus
  */
 
-enum class AspectRatio(val widthRatio: Float, val heightRatio: Float) {
+enum class AspectRatioType(val widthRatio: Float, val heightRatio: Float) {
     ASPECT_FREE(-1f, -1f),
     ASPECT_INS_1_1(1f, 1f),
     ASPECT_INS_4_5(4f, 5f),

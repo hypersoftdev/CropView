@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/black"
-    tools:context=".result.ActivityResult">
+    tools:context=".ui.result.ActivityResult">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/sivImageResult"
