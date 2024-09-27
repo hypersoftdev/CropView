@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.textview.MaterialTextView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:foreground="?attr/selectableItemBackground"
@@ -8,4 +8,4 @@
     android:paddingHorizontal="8dp"
     android:paddingVertical="4dp"
     android:text="@string/app_name"
-    app:drawableTopCompat="@drawable/ic_aspect_ratio" />
+    tools:drawableTopCompat="@drawable/ic_aspect_ratio_free" />
