@@ -3,7 +3,6 @@ package com.sample.cropview.helpers.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.toDrawable
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -37,12 +36,13 @@ class AdapterAspectRatio(private val itemClick: (aspectRatioType: AspectRatioTyp
     }
 
     private fun bindViews(binding: ItemAspectRatioBinding, currentItem: AspectRatio) {
-        with(binding.root) {
-            text = currentItem.text
-            setCompoundDrawablesWithIntrinsicBounds(0, currentItem.iconResId, 0, 0)
-            background = when (currentItem.isSelected) {
-                true -> ContextCompat.getColor(context, R.color.colorSelection).toDrawable()
-                false -> null
+        with(binding) {
+            val color = ContextCompat.getColor(root.context, R.color.colorSelection)
+            mtvTitleItemAspectRatio.text = currentItem.text
+            sivImageItemAspectRatio.setImageResource(currentItem.iconResId)
+            when (currentItem.isSelected) {
+                true -> root.setCardBackgroundColor(color)
+                false -> root.setCardBackgroundColor(0)
             }
         }
     }
