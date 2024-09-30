@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sample.cropview.R
 import com.sample.cropview.databinding.ItemAspectRatioBinding
 import com.sample.cropview.helpers.models.AspectRatio
-import dev.pegasus.crop.aspectRatio.model.AspectRatioType
+import dev.pegasus.crop.enums.AspectRatioType
 
 /**
  *   Developer: Sohaib Ahmed

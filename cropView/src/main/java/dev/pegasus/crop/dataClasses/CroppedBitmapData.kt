@@ -1,4 +1,4 @@
-package dev.pegasus.crop.ui
+package dev.pegasus.crop.dataClasses
 
 import android.graphics.Bitmap
 

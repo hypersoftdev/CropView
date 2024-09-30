@@ -1,4 +1,4 @@
-package dev.pegasus.crop.cropView
+package dev.pegasus.crop.enums
 
 /**
  *   Developer: Sohaib Ahmed
@@ -8,6 +8,10 @@ package dev.pegasus.crop.cropView
  *     -> linkedin.com/in/epegasus
  */
 
-enum class AspectMode {
-    FREE, ASPECT
+enum class Edge {
+    NONE,
+    LEFT,
+    TOP,
+    RIGHT,
+    BOTTOM
 }

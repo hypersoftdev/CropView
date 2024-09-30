@@ -10,18 +10,36 @@ import android.graphics.Paint
 import android.graphics.RectF
 import android.graphics.Region
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.MotionEvent.ACTION_DOWN
 import android.view.MotionEvent.ACTION_MOVE
 import android.view.MotionEvent.ACTION_UP
 import android.view.View
+import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
-import dev.pegasus.crop.aspectRatio.model.AspectRatioType
-import dev.pegasus.crop.cropView.AspectMode
-import dev.pegasus.crop.cropView.AspectMode.ASPECT
-import dev.pegasus.crop.cropView.AspectMode.FREE
-import dev.pegasus.crop.cropView.BitmapGestureHandler
-import dev.pegasus.crop.ui.CroppedBitmapData
+import dev.pegasus.crop.dataClasses.CroppedBitmapData
+import dev.pegasus.crop.enums.AspectMode
+import dev.pegasus.crop.enums.AspectMode.ASPECT
+import dev.pegasus.crop.enums.AspectMode.FREE
+import dev.pegasus.crop.enums.AspectRatioType
+import dev.pegasus.crop.enums.Corner
+import dev.pegasus.crop.enums.Corner.BOTTOM_LEFT
+import dev.pegasus.crop.enums.Corner.BOTTOM_RIGHT
+import dev.pegasus.crop.enums.Corner.NONE
+import dev.pegasus.crop.enums.Corner.TOP_LEFT
+import dev.pegasus.crop.enums.Corner.TOP_RIGHT
+import dev.pegasus.crop.enums.DragState
+import dev.pegasus.crop.enums.DraggingState
+import dev.pegasus.crop.enums.DraggingState.DraggingCorner
+import dev.pegasus.crop.enums.DraggingState.DraggingEdge
+import dev.pegasus.crop.enums.Edge
+import dev.pegasus.crop.enums.Edge.BOTTOM
+import dev.pegasus.crop.enums.Edge.LEFT
+import dev.pegasus.crop.enums.Edge.RIGHT
+import dev.pegasus.crop.enums.Edge.TOP
+import dev.pegasus.crop.gestures.BitmapGestureHandler
+import dev.pegasus.crop.model.AnimatableRectF
 import dev.pegasus.crop.util.extensions.animateScaleToPoint
 import dev.pegasus.crop.util.extensions.animateTo
 import dev.pegasus.crop.util.extensions.animateToMatrix
@@ -29,21 +47,6 @@ import dev.pegasus.crop.util.extensions.clone
 import dev.pegasus.crop.util.extensions.getCornerTouch
 import dev.pegasus.crop.util.extensions.getEdgeTouch
 import dev.pegasus.crop.util.extensions.getHypotenus
-import dev.pegasus.crop.util.model.AnimatableRectF
-import dev.pegasus.crop.util.model.Corner
-import dev.pegasus.crop.util.model.Corner.BOTTOM_LEFT
-import dev.pegasus.crop.util.model.Corner.BOTTOM_RIGHT
-import dev.pegasus.crop.util.model.Corner.NONE
-import dev.pegasus.crop.util.model.Corner.TOP_LEFT
-import dev.pegasus.crop.util.model.Corner.TOP_RIGHT
-import dev.pegasus.crop.util.model.DraggingState
-import dev.pegasus.crop.util.model.DraggingState.DraggingCorner
-import dev.pegasus.crop.util.model.DraggingState.DraggingEdge
-import dev.pegasus.crop.util.model.Edge
-import dev.pegasus.crop.util.model.Edge.BOTTOM
-import dev.pegasus.crop.util.model.Edge.LEFT
-import dev.pegasus.crop.util.model.Edge.RIGHT
-import dev.pegasus.crop.util.model.Edge.TOP
 import kotlin.math.hypot
 import kotlin.math.max
 import kotlin.math.min
@@ -148,7 +151,7 @@ class CropView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
     /**
      * Default margin for cropRect.
      */
-    private val marginInPixelSize = resources.getDimensionPixelSize(R.dimen.margin_max_crop_rect).toFloat()
+    private var marginInPixelSize = resources.getDimensionPixelSize(R.dimen.margin_max_crop_rect).toFloat()
 
     /**
      * Aspect ratio matters for calculation.
@@ -184,7 +187,7 @@ class CropView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
     /**
      * Crop rect grid line width
      */
-    private val gridLineWidthInPixel = resources.getDimension(R.dimen.grid_line_width)
+    private var gridLineWidthInPixel = resources.getDimension(R.dimen.grid_line_width)
 
     /**
      * Crop rect draw paint
@@ -198,12 +201,12 @@ class CropView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
     /**
      * Corner toggle line width
      */
-    private val cornerToggleWidthInPixel = resources.getDimension(R.dimen.corner_toggle_width)
+    private var cornerToggleWidthInPixel = resources.getDimension(R.dimen.corner_toggle_width)
 
     /**
      * Corner toggle line length
      */
-    private val cornerToggleLengthInPixel = resources.getDimension(R.dimen.corner_toggle_length)
+    private var cornerToggleLengthInPixel = resources.getDimension(R.dimen.corner_toggle_length)
 
     private val minRectLength = resources.getDimension(R.dimen.min_rect)
 
@@ -230,6 +233,11 @@ class CropView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
      * Mask bitmap
      */
     private var maskBitmap: Bitmap? = null
+
+    /**
+     * Current dragging state (block except states)
+     */
+    private var dragState = DragState.ALL
 
     private val bitmapGestureListener = object : BitmapGestureHandler.BitmapGestureListener {
         override fun onDoubleTap(motionEvent: MotionEvent) {
@@ -317,11 +325,77 @@ class CropView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
         context.theme.obtainStyledAttributes(attrs, R.styleable.CropView, 0, 0).apply {
             try {
                 val defBackgroundColor = ContextCompat.getColor(context, R.color.colorCropBackground)
-                setBackgroundColor(getColor(R.styleable.CropView_cropBackgroundColor, defBackgroundColor))
+                setCropBackgroundColor(defBackgroundColor)
+
+                // Fetching crop corner and gridline attributes
+                val cornerLength = getDimension(R.styleable.CropView_cropCornerLength, 32f)
+                val cornerWidth = getDimension(R.styleable.CropView_cropCornerWidth, 6f)
+                val cornerColor = getColor(R.styleable.CropView_cropCornerColor, Color.WHITE)
+                setCropCornerLength(cornerLength)
+                setCropCornerWidth(cornerWidth)
+                setCropCornerColor(cornerColor)
+
+                val gridlineWidth = getDimension(R.styleable.CropView_cropGridlineWidth, 1f)
+                val gridlineColor = getColor(R.styleable.CropView_cropGridlineColor, Color.LTGRAY)
+                setGridlineWidth(gridlineWidth)
+                setGridlineColor(gridlineColor)
+
+                val cropMargin = getDimension(R.styleable.CropView_cropMargin, 24f)
+                setCropMargin(cropMargin)
+
+                // Fetching and setting DraggingState
+                val dragStateValue = getInt(R.styleable.CropView_cropDraggingState, 0)
+                setDragState(dragStateValue)
+
             } finally {
                 recycle()
             }
         }
+    }
+
+    private fun setDragState(dragStateValue: Int) {
+        dragState = DragState.fromValue(dragStateValue)
+        invalidate()
+    }
+
+    /**
+     * @param colorInt Color resource id e.g. val colorId = ContextCompat.getColor(context, R.color.black)
+     */
+    fun setCropBackgroundColor(@ColorInt colorInt: Int) {
+        setBackgroundColor(colorInt)
+        invalidate()
+    }
+
+    fun setCropCornerColor(@ColorInt colorInt: Int) {
+        cornerTogglePaint.color = colorInt
+        invalidate()
+    }
+
+    fun setCropCornerLength(cornerLength: Float) {
+        cornerToggleLengthInPixel = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, cornerLength, resources.displayMetrics)
+        invalidate()
+    }
+
+    fun setCropCornerWidth(cornerWidth: Float) {
+        cornerToggleWidthInPixel = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, cornerWidth, resources.displayMetrics)
+        cornerTogglePaint.strokeWidth = cornerToggleWidthInPixel
+        invalidate()
+    }
+
+    fun setGridlineWidth(gridlineWidth: Float) {
+        gridLineWidthInPixel = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, gridlineWidth, resources.displayMetrics)
+        cropPaint.strokeWidth = gridLineWidthInPixel
+        invalidate()
+    }
+
+    fun setGridlineColor(@ColorInt colorInt: Int) {
+        cropPaint.color = colorInt
+        invalidate()
+    }
+
+    fun setCropMargin(cropMargin: Float) {
+        marginInPixelSize = cropMargin
+        invalidate()
     }
 
     /**

@@ -5,10 +5,9 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.exifinterface.media.ExifInterface
-import dev.pegasus.crop.ui.CroppedBitmapData
+import dev.pegasus.crop.dataClasses.CroppedBitmapData
 import dev.pegasus.crop.util.extensions.rotateBitmap
 import io.reactivex.Completable
-import io.reactivex.Single
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File

@@ -1,4 +1,4 @@
-package dev.pegasus.crop.util.model
+package dev.pegasus.crop.enums
 
 /**
  *   Developer: Sohaib Ahmed
@@ -8,13 +8,9 @@ package dev.pegasus.crop.util.model
  *     -> linkedin.com/in/epegasus
  */
 
-
 sealed class DraggingState {
     data class DraggingCorner(var corner: Corner) : DraggingState()
-
     data class DraggingEdge(var edge: Edge) : DraggingState()
-
-    object DraggingBitmap : DraggingState()
-
-    object Idle : DraggingState()
+    data object DraggingBitmap : DraggingState()
+    data object Idle : DraggingState()
 }

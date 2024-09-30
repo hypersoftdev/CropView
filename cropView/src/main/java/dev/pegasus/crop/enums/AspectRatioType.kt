@@ -1,4 +1,4 @@
-package dev.pegasus.crop.aspectRatio.model
+package dev.pegasus.crop.enums
 
 /**
  *   Developer: Sohaib Ahmed

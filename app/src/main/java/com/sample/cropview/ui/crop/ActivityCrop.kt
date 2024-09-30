@@ -11,7 +11,7 @@ import com.sample.cropview.databinding.ActivityCropBinding
 import com.sample.cropview.helpers.adapter.AdapterAspectRatio
 import com.sample.cropview.ui.base.BaseActivity
 import com.sample.cropview.ui.result.ActivityResult
-import dev.pegasus.crop.aspectRatio.model.AspectRatioType
+import dev.pegasus.crop.enums.AspectRatioType
 
 class ActivityCrop : BaseActivity<ActivityCropBinding>(ActivityCropBinding::inflate) {
 

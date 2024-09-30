@@ -1,6 +1,4 @@
-package dev.pegasus.crop.util.bitmaps
-
-import android.graphics.Bitmap
+package dev.pegasus.crop.enums
 
 /**
  *   Developer: Sohaib Ahmed
@@ -10,5 +8,6 @@ import android.graphics.Bitmap
  *     -> linkedin.com/in/epegasus
  */
 
-
-data class ResizedBitmap(val bitmap: Bitmap?)
+enum class AspectMode {
+    FREE, ASPECT
+}

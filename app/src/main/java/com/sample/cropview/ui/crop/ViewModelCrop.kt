@@ -9,7 +9,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.sample.cropview.helpers.dp.DpAspectRatio
 import com.sample.cropview.helpers.models.AspectRatio
-import dev.pegasus.crop.aspectRatio.model.AspectRatioType
+import dev.pegasus.crop.enums.AspectRatioType
 import dev.pegasus.crop.util.bitmaps.BitmapUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

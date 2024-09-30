@@ -2,7 +2,7 @@ package com.sample.cropview.helpers.dp
 
 import com.sample.cropview.R
 import com.sample.cropview.helpers.models.AspectRatio
-import dev.pegasus.crop.aspectRatio.model.AspectRatioType
+import dev.pegasus.crop.enums.AspectRatioType
 
 /**
  *   Developer: Sohaib Ahmed

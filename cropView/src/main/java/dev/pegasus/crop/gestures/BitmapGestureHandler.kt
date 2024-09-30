@@ -1,4 +1,4 @@
-package dev.pegasus.crop.cropView
+package dev.pegasus.crop.gestures
 
 import android.content.Context
 import android.view.GestureDetector

@@ -2,5 +2,18 @@
 <resources>
     <declare-styleable name="CropView">
         <attr name="cropBackgroundColor" format="color" />
+        <attr name="cropCornerLength" format="dimension"/>
+        <attr name="cropCornerWidth" format="dimension"/>
+        <attr name="cropCornerColor" format="color"/>
+        <attr name="cropGridlineWidth" format="dimension"/>
+        <attr name="cropGridlineColor" format="color"/>
+        <attr name="cropMargin" format="dimension"/>
+        <attr name="cropDraggingState" format="enum">
+            <enum name="all" value="0"/>
+            <enum name="drag_corner" value="1"/>
+            <enum name="drag_edge" value="2"/>
+            <enum name="drag_bitmap" value="3"/>
+            <enum name="drag_corner_edge" value="4"/>
+        </attr>
     </declare-styleable>
 </resources>
