@@ -28,6 +28,8 @@ class ActivityCrop : BaseActivity<ActivityCropBinding>(ActivityCropBinding::infl
 
         binding.mbBackCrop.setOnClickListener { finish() }
         binding.mbSaveCrop.setOnClickListener { saveImage() }
+        binding.mbRotateLeftCrop.setOnClickListener { binding.cropView.setCropRotation(-90f) }
+        binding.mbRotateRightCrop.setOnClickListener { binding.cropView.setCropRotation(90f) }
     }
 
     private fun setUI() {

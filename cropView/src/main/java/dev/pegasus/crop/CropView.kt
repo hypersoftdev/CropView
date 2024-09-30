@@ -18,6 +18,7 @@ import android.view.MotionEvent.ACTION_UP
 import android.view.View
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
+import dev.pegasus.crop.customs.AnimatableRectF
 import dev.pegasus.crop.dataClasses.CroppedBitmapData
 import dev.pegasus.crop.enums.AspectMode
 import dev.pegasus.crop.enums.AspectMode.ASPECT
@@ -39,7 +40,6 @@ import dev.pegasus.crop.enums.Edge.LEFT
 import dev.pegasus.crop.enums.Edge.RIGHT
 import dev.pegasus.crop.enums.Edge.TOP
 import dev.pegasus.crop.gestures.BitmapGestureHandler
-import dev.pegasus.crop.customs.AnimatableRectF
 import dev.pegasus.crop.util.extensions.animateScaleToPoint
 import dev.pegasus.crop.util.extensions.animateTo
 import dev.pegasus.crop.util.extensions.animateToMatrix
@@ -76,7 +76,7 @@ class CropView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
     /**
      * Main rect which is drawn to canvas.
      */
-    private val cropRect: AnimatableRectF = AnimatableRectF()
+    private var cropRect: AnimatableRectF = AnimatableRectF()
 
     /**
      * Temporary rect to animate crop rect to.
@@ -239,6 +239,15 @@ class CropView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
      */
     private var dragState = DragState.DRAG_ALL
 
+
+    /**
+     * Rotation degrees of bitmap & cropRect
+     */
+    private var rotationDegrees = 0f
+
+    /**
+     *  Gesture listener for bitmap
+     */
     private val bitmapGestureListener = object : BitmapGestureHandler.BitmapGestureListener {
         override fun onDoubleTap(motionEvent: MotionEvent) {
             if (isBitmapScaleExceedMaxLimit(DOUBLE_TAP_SCALE_FACTOR)) {
@@ -260,11 +269,7 @@ class CropView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
                 return
             }
 
-            bitmapMatrix.animateScaleToPoint(
-                DOUBLE_TAP_SCALE_FACTOR,
-                motionEvent.x,
-                motionEvent.y
-            ) {
+            bitmapMatrix.animateScaleToPoint(DOUBLE_TAP_SCALE_FACTOR, motionEvent.x, motionEvent.y) {
                 notifyCropRectChanged()
                 invalidate()
             }
@@ -353,11 +358,6 @@ class CropView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
         }
     }
 
-    private fun setDragState(dragStateValue: Int) {
-        dragState = DragState.fromValue(dragStateValue)
-        invalidate()
-    }
-
     /**
      * @param colorInt Color resource id e.g. val colorId = ContextCompat.getColor(context, R.color.black)
      */
@@ -396,6 +396,38 @@ class CropView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
     fun setCropMargin(cropMargin: Float) {
         marginInPixelSize = cropMargin
         invalidate()
+    }
+
+    private fun setDragState(dragStateValue: Int) {
+        dragState = DragState.fromValue(dragStateValue)
+        invalidate()
+    }
+
+    // Rotate the crop area and bitmap by the specified angle
+    fun setCropRotation(angle: Float) {
+        rotationDegrees = (rotationDegrees + angle) % 360
+        bitmapMatrix.postRotate(angle, cropRect.centerX(), cropRect.centerY())
+        //cropRect = rotateRect(cropRect, angle)
+        notifyCropRectChanged()
+        invalidate()
+    }
+
+    // Helper to rotate a RectF by a given angle
+    private fun rotateRect(rect: RectF, angle: Float): AnimatableRectF {
+        val matrix = Matrix()
+        matrix.setRotate(angle, rect.centerX(), rect.centerY())
+
+        val points = floatArrayOf(
+            rect.left, rect.top,
+            rect.right, rect.top,
+            rect.right, rect.bottom,
+            rect.left, rect.bottom
+        )
+        matrix.mapPoints(points)
+
+        val newRect = AnimatableRectF()
+        newRect.set(points[0], points[1], points[4], points[5])
+        return newRect
     }
 
     /**
@@ -460,12 +492,7 @@ class CropView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
                         }
                     }
 
-                    DraggingState.DraggingBitmap -> {
-                        if (dragState == DragState.DRAG_ALL || dragState == DragState.DRAG_BITMAP) {
-                            bitmapGestureHandler.onTouchEvent(event)
-                        }
-                    }
-
+                    DraggingState.DraggingBitmap -> {}
                     DraggingState.Idle -> {}
                 }
             }
@@ -483,9 +510,6 @@ class CropView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
                     DraggingState.DraggingBitmap -> {}
                     DraggingState.Idle -> {}
                 }
-
-                // Reset dragging state to idle
-                draggingState = DraggingState.Idle
             }
         }
 
