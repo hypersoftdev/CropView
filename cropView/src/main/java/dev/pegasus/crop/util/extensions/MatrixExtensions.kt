@@ -15,12 +15,7 @@ import android.view.animation.AccelerateDecelerateInterpolator
 
 private val values = FloatArray(9)
 
-fun Matrix.animateScaleToPoint(
-    scaleFactor: Float,
-    dx: Float,
-    dy: Float,
-    onUpdate: () -> Unit = {}
-) {
+fun Matrix.animateScaleToPoint(scaleFactor: Float, dx: Float, dy: Float, onUpdate: () -> Unit = {}) {
 
     val targetMatrix = this.clone()
         .apply {
@@ -32,43 +27,24 @@ fun Matrix.animateScaleToPoint(
     animateToMatrix(targetMatrix, onUpdate)
 }
 
-fun Matrix.animateToMatrix(
-    targetMatrix: Matrix,
-    onUpdate: () -> Unit = {}
-) {
+fun Matrix.animateToMatrix(targetMatrix: Matrix, onUpdate: () -> Unit = {}) {
 
     val scaleAnimator = ValueAnimator.ofFloat(this.getScaleX(), targetMatrix.getScaleX())
-    val translateXAnimator =
-        ValueAnimator.ofFloat(this.getTranslateX(), targetMatrix.getTranslateX())
-    val translateYAnimator =
-        ValueAnimator.ofFloat(this.getTranslateY(), targetMatrix.getTranslateY())
+    val translateXAnimator = ValueAnimator.ofFloat(this.getTranslateX(), targetMatrix.getTranslateX())
+    val translateYAnimator = ValueAnimator.ofFloat(this.getTranslateY(), targetMatrix.getTranslateY())
 
     translateYAnimator.addUpdateListener {
         reset()
-        preScale(
-            scaleAnimator.animatedValue as Float,
-            scaleAnimator.animatedValue as Float
-        )
-        postTranslate(
-            translateXAnimator.animatedValue as Float,
-            translateYAnimator.animatedValue as Float
-        )
+        preScale(scaleAnimator.animatedValue as Float, scaleAnimator.animatedValue as Float)
+        postTranslate(translateXAnimator.animatedValue as Float, translateYAnimator.animatedValue as Float)
         onUpdate.invoke()
     }
 
     AnimatorSet()
-        .apply {
-            playTogether(
-                scaleAnimator,
-                translateXAnimator,
-                translateYAnimator
-            )
-        }
+        .apply { playTogether(scaleAnimator, translateXAnimator, translateYAnimator) }
         .apply { interpolator = AccelerateDecelerateInterpolator() }
         .apply { duration = 300 }
         .start()
-
-
 }
 
 fun Matrix.getScaleX(): Float {

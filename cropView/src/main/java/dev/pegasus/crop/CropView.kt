@@ -420,12 +420,6 @@ class CropView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
                 val corner = cropRect.getCornerTouch(event, touchThreshold)
                 val edge = cropRect.getEdgeTouch(event, touchThreshold)
 
-                /*draggingState = when {
-                    isCorner(corner) -> DraggingCorner(corner)
-                    isEdge(edge) -> DraggingEdge(edge)
-                    else -> DraggingState.DraggingBitmap
-                }*/
-
                 draggingState = when {
                     isCorner(corner) && (dragState == DragState.DRAG_ALL || dragState == DragState.DRAG_CORNER || dragState == DragState.DRAG_CORNER_EDGE) -> {
                         DraggingCorner(corner)
@@ -439,9 +433,7 @@ class CropView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
                         DraggingState.DraggingBitmap
                     }
 
-                    else -> {
-                        DraggingState.Idle // Block dragging if the state doesn't allow it
-                    }
+                    else -> DraggingState.Idle
                 }
 
                 calculateMinRect()
@@ -470,35 +462,12 @@ class CropView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
 
                     DraggingState.DraggingBitmap -> {
                         if (dragState == DragState.DRAG_ALL || dragState == DragState.DRAG_BITMAP) {
-                            // Allow bitmap dragging only if it's permitted by the drag state
                             bitmapGestureHandler.onTouchEvent(event)
                         }
                     }
 
-                    DraggingState.Idle -> {
-                        // Do nothing if dragging is blocked
-                    }
-                }
-
-
-                /*when (val state = draggingState) {
-                    is DraggingCorner -> {
-                        onCornerPositionChanged(state.corner, event)
-                        updateExceedMaxBorders()
-                        updateExceedMinBorders()
-                        notifyCropRectChanged()
-                    }
-
-                    is DraggingEdge -> {
-                        onEdgePositionChanged(state.edge, event)
-                        updateExceedMaxBorders()
-                        updateExceedMinBorders()
-                        notifyCropRectChanged()
-                    }
-
-                    DraggingState.DraggingBitmap -> {}
                     DraggingState.Idle -> {}
-                }*/
+                }
             }
 
             ACTION_UP -> {
