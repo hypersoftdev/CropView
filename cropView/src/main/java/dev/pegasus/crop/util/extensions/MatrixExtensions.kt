@@ -13,7 +13,6 @@ import android.view.animation.AccelerateDecelerateInterpolator
  *     -> linkedin.com/in/epegasus
  */
 
-
 private val values = FloatArray(9)
 
 fun Matrix.animateScaleToPoint(

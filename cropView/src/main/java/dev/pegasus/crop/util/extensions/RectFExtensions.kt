@@ -5,7 +5,7 @@ import android.animation.ObjectAnimator
 import android.graphics.RectF
 import android.view.MotionEvent
 import android.view.animation.AccelerateDecelerateInterpolator
-import dev.pegasus.crop.model.AnimatableRectF
+import dev.pegasus.crop.customs.AnimatableRectF
 import dev.pegasus.crop.enums.Corner
 import dev.pegasus.crop.enums.Edge
 import kotlin.math.hypot

@@ -39,7 +39,7 @@ import dev.pegasus.crop.enums.Edge.LEFT
 import dev.pegasus.crop.enums.Edge.RIGHT
 import dev.pegasus.crop.enums.Edge.TOP
 import dev.pegasus.crop.gestures.BitmapGestureHandler
-import dev.pegasus.crop.model.AnimatableRectF
+import dev.pegasus.crop.customs.AnimatableRectF
 import dev.pegasus.crop.util.extensions.animateScaleToPoint
 import dev.pegasus.crop.util.extensions.animateTo
 import dev.pegasus.crop.util.extensions.animateToMatrix
@@ -214,7 +214,7 @@ class CropView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
      * Corner toggle paint
      */
     private val cornerTogglePaint = Paint().apply {
-        color = ContextCompat.getColor(context, R.color.blue)
+        color = ContextCompat.getColor(context, R.color.colorCorner)
         strokeWidth = cornerToggleWidthInPixel
         style = Paint.Style.STROKE
     }

@@ -12,7 +12,6 @@ import android.media.ExifInterface
  *     -> linkedin.com/in/epegasus
  */
 
-
 fun Bitmap.rotateBitmap(orientation: Int): Bitmap {
     val matrix = Matrix()
     when (orientation) {
@@ -23,15 +22,18 @@ fun Bitmap.rotateBitmap(orientation: Int): Bitmap {
             matrix.setRotate(180f)
             matrix.postScale(-1f, 1f)
         }
+
         ExifInterface.ORIENTATION_TRANSPOSE -> {
             matrix.setRotate(90f)
             matrix.postScale(-1f, 1f)
         }
+
         ExifInterface.ORIENTATION_ROTATE_90 -> matrix.setRotate(90f)
         ExifInterface.ORIENTATION_TRANSVERSE -> {
             matrix.setRotate(-90f)
             matrix.postScale(-1f, 1f)
         }
+
         ExifInterface.ORIENTATION_ROTATE_270 -> matrix.setRotate(-90f)
         else -> return this
     }

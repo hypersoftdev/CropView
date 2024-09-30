@@ -1,4 +1,4 @@
-package dev.pegasus.crop.model
+package dev.pegasus.crop.customs
 
 import android.graphics.RectF
 
