@@ -10,7 +10,6 @@ import android.graphics.Paint
 import android.graphics.RectF
 import android.graphics.Region
 import android.util.AttributeSet
-import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.MotionEvent.ACTION_DOWN
 import android.view.MotionEvent.ACTION_MOVE
@@ -206,7 +205,8 @@ class CropView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
     /**
      * Corner toggle line length
      */
-    private var cornerToggleLengthInPixel = resources.getDimension(R.dimen.corner_toggle_length)
+    private var cornerToggleLengthInPixel = 0f
+    private var minCornerToggleLengthInPixel = 32f
 
     private val minRectLength = resources.getDimension(R.dimen.min_rect)
 
@@ -332,9 +332,9 @@ class CropView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
                 val defBackgroundColor = ContextCompat.getColor(context, R.color.colorCropBackground)
                 setCropBackgroundColor(defBackgroundColor)
 
-                // Fetching crop corner and gridline attributes
-                val cornerLength = getDimension(R.styleable.CropView_cropCornerLength, 32f)
-                val cornerWidth = getDimension(R.styleable.CropView_cropCornerWidth, 6f)
+                // Fetching crop corner and gridline attributes (in dp)
+                val cornerLength = getDimension(R.styleable.CropView_cropCornerLength, 60f)
+                val cornerWidth = getDimension(R.styleable.CropView_cropCornerWidth, 16f)
                 val cornerColor = getColor(R.styleable.CropView_cropCornerColor, Color.WHITE)
                 setCropCornerLength(cornerLength)
                 setCropCornerWidth(cornerWidth)
@@ -345,8 +345,7 @@ class CropView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
                 setGridlineWidth(gridlineWidth)
                 setGridlineColor(gridlineColor)
 
-                val cropMargin = getDimension(R.styleable.CropView_cropMargin, 24f)
-                setCropMargin(cropMargin)
+                marginInPixelSize = getDimension(R.styleable.CropView_cropMargin, 48f)
 
                 // Fetching and setting DraggingState
                 val dragStateValue = getInt(R.styleable.CropView_cropDraggingState, 0)
@@ -357,6 +356,7 @@ class CropView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
             }
         }
     }
+
 
     /**
      * @param colorInt Color resource id e.g. val colorId = ContextCompat.getColor(context, R.color.black)
@@ -371,20 +371,22 @@ class CropView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
         invalidate()
     }
 
+    fun getCropCornerLength(): Float {
+        return cornerToggleLengthInPixel
+    }
+
     fun setCropCornerLength(cornerLength: Float) {
-        cornerToggleLengthInPixel = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, cornerLength, resources.displayMetrics)
+        cornerToggleLengthInPixel = cornerLength
         invalidate()
+    }
+
+    fun getCropCornerWidth(): Float {
+        return cornerToggleWidthInPixel
     }
 
     fun setCropCornerWidth(cornerWidth: Float) {
-        cornerToggleWidthInPixel = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, cornerWidth, resources.displayMetrics)
+        cornerToggleWidthInPixel = cornerWidth
         cornerTogglePaint.strokeWidth = cornerToggleWidthInPixel
-        invalidate()
-    }
-
-    fun setGridlineWidth(gridlineWidth: Float) {
-        gridLineWidthInPixel = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, gridlineWidth, resources.displayMetrics)
-        cropPaint.strokeWidth = gridLineWidthInPixel
         invalidate()
     }
 
@@ -393,12 +395,17 @@ class CropView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
         invalidate()
     }
 
-    fun setCropMargin(cropMargin: Float) {
-        marginInPixelSize = cropMargin
+    fun getGridlineWidth(): Float {
+        return gridLineWidthInPixel
+    }
+
+    fun setGridlineWidth(gridlineWidth: Float) {
+        gridLineWidthInPixel = gridlineWidth
+        cropPaint.strokeWidth = gridLineWidthInPixel
         invalidate()
     }
 
-    private fun setDragState(dragStateValue: Int) {
+    fun setDragState(dragStateValue: Int) {
         dragState = DragState.fromValue(dragStateValue)
         invalidate()
     }
@@ -574,11 +581,11 @@ class CropView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
     /**
      * Get cropped bitmap.
      */
-    fun getCroppedData(): CroppedBitmapData {
+    fun getCroppedData(): Bitmap? {
         val croppedBitmapRect = getCropSizeOriginal()
 
         if (bitmapRect.intersect(croppedBitmapRect).not()) {
-            return CroppedBitmapData(croppedBitmap = bitmap)
+            return bitmap
         }
 
         val cropLeft = if (croppedBitmapRect.left.roundToInt() < bitmapRect.left) {
@@ -607,7 +614,7 @@ class CropView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
 
         bitmap?.let {
             val croppedBitmap = Bitmap.createBitmap(it, cropLeft, cropTop, cropRight - cropLeft, cropBottom - cropTop)
-            return CroppedBitmapData(croppedBitmap = croppedBitmap)
+            return croppedBitmap
         }
 
         throw IllegalStateException("Bitmap is null.")
