@@ -9,7 +9,7 @@ package dev.pegasus.crop.enums
  */
 
 enum class DragState(val value: Int) {
-    ALL(0),
+    DRAG_ALL(0),
     DRAG_CORNER(1),
     DRAG_EDGE(2),
     DRAG_BITMAP(3),
@@ -17,7 +17,7 @@ enum class DragState(val value: Int) {
 
     companion object {
         fun fromValue(value: Int): DragState {
-            return entries.firstOrNull { it.value == value } ?: ALL
+            return entries.firstOrNull { it.value == value } ?: DRAG_ALL
         }
     }
 }

@@ -9,7 +9,7 @@
         <attr name="cropGridlineColor" format="color"/>
         <attr name="cropMargin" format="dimension"/>
         <attr name="cropDraggingState" format="enum">
-            <enum name="all" value="0"/>
+            <enum name="drag_all" value="0"/>
             <enum name="drag_corner" value="1"/>
             <enum name="drag_edge" value="2"/>
             <enum name="drag_bitmap" value="3"/>

@@ -68,7 +68,7 @@
         app:cropCornerColor="?attr/colorPrimary"
         app:cropCornerLength="32dp"
         app:cropCornerWidth="6dp"
-        app:cropDraggingState="all"
+        app:cropDraggingState="drag_all"
         app:cropGridlineColor="@color/white"
         app:cropGridlineWidth="1dp"
         app:cropMargin="24dp"

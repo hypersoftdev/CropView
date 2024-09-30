@@ -237,7 +237,7 @@ class CropView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
     /**
      * Current dragging state (block except states)
      */
-    private var dragState = DragState.ALL
+    private var dragState = DragState.DRAG_ALL
 
     private val bitmapGestureListener = object : BitmapGestureHandler.BitmapGestureListener {
         override fun onDoubleTap(motionEvent: MotionEvent) {
@@ -420,10 +420,28 @@ class CropView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
                 val corner = cropRect.getCornerTouch(event, touchThreshold)
                 val edge = cropRect.getEdgeTouch(event, touchThreshold)
 
-                draggingState = when {
+                /*draggingState = when {
                     isCorner(corner) -> DraggingCorner(corner)
                     isEdge(edge) -> DraggingEdge(edge)
                     else -> DraggingState.DraggingBitmap
+                }*/
+
+                draggingState = when {
+                    isCorner(corner) && (dragState == DragState.DRAG_ALL || dragState == DragState.DRAG_CORNER || dragState == DragState.DRAG_CORNER_EDGE) -> {
+                        DraggingCorner(corner)
+                    }
+
+                    isEdge(edge) && (dragState == DragState.DRAG_ALL || dragState == DragState.DRAG_EDGE || dragState == DragState.DRAG_CORNER_EDGE) -> {
+                        DraggingEdge(edge)
+                    }
+
+                    dragState == DragState.DRAG_ALL || dragState == DragState.DRAG_BITMAP -> {
+                        DraggingState.DraggingBitmap
+                    }
+
+                    else -> {
+                        DraggingState.Idle // Block dragging if the state doesn't allow it
+                    }
                 }
 
                 calculateMinRect()
@@ -432,6 +450,38 @@ class CropView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
 
             ACTION_MOVE -> {
                 when (val state = draggingState) {
+                    is DraggingCorner -> {
+                        if (dragState == DragState.DRAG_ALL || dragState == DragState.DRAG_CORNER || dragState == DragState.DRAG_CORNER_EDGE) {
+                            onCornerPositionChanged(state.corner, event)
+                            updateExceedMaxBorders()
+                            updateExceedMinBorders()
+                            notifyCropRectChanged()
+                        }
+                    }
+
+                    is DraggingEdge -> {
+                        if (dragState == DragState.DRAG_ALL || dragState == DragState.DRAG_EDGE || dragState == DragState.DRAG_CORNER_EDGE) {
+                            onEdgePositionChanged(state.edge, event)
+                            updateExceedMaxBorders()
+                            updateExceedMinBorders()
+                            notifyCropRectChanged()
+                        }
+                    }
+
+                    DraggingState.DraggingBitmap -> {
+                        if (dragState == DragState.DRAG_ALL || dragState == DragState.DRAG_BITMAP) {
+                            // Allow bitmap dragging only if it's permitted by the drag state
+                            bitmapGestureHandler.onTouchEvent(event)
+                        }
+                    }
+
+                    DraggingState.Idle -> {
+                        // Do nothing if dragging is blocked
+                    }
+                }
+
+
+                /*when (val state = draggingState) {
                     is DraggingCorner -> {
                         onCornerPositionChanged(state.corner, event)
                         updateExceedMaxBorders()
@@ -448,7 +498,7 @@ class CropView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
 
                     DraggingState.DraggingBitmap -> {}
                     DraggingState.Idle -> {}
-                }
+                }*/
             }
 
             ACTION_UP -> {
@@ -464,6 +514,9 @@ class CropView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
                     DraggingState.DraggingBitmap -> {}
                     DraggingState.Idle -> {}
                 }
+
+                // Reset dragging state to idle
+                draggingState = DraggingState.Idle
             }
         }
 
