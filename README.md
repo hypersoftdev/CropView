@@ -5,10 +5,19 @@ This repository hosts the `cropView` module, a customizable view for croppingima
 
 ## Features
 
+* Flexible cropping for users
+* Double tap focus
+* Pinch Zoom
+* Free Mode
+* Size Displayer
+* Auto Centered
+* Animations
 * Customizable corner styles and colors
 * Adjustable gridlines
 * Drag-to-crop functionality
 * Easy integration with JitPack
+* Aspect Ratio Mode
+* Rotations
 
 ## Gradle Integration
 
