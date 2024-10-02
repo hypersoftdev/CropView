@@ -19,6 +19,9 @@ This repository hosts the `cropView` module, a customizable view for croppingima
 * Aspect Ratio Mode
 * Rotations
 
+![screenshot](https://github.com/user-attachments/assets/54bb8422-7361-40d9-ba27-3025d9a96cb0)
+
+
 ## Gradle Integration
 
 ### Step A: Add Maven Repository
@@ -113,6 +116,8 @@ To obtain the cropped image as a Bitmap, use the following method:
 ```
 val croppedImage = cropView.getCroppedImage()
 ```
+
+https://github.com/user-attachments/assets/a1ccbe44-c8b7-44a0-b1b1-0f3fe9a5f9f2
 
 ## Contributing
 
