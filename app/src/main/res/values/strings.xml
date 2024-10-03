@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">CropView</string>
+
+    <string name="choose_image">Choose Image</string>
+    <string name="save">Save</string>
+
+    <string name="aspect_ratios">Aspect Ratios</string>
+    <string name="corner_color">Corner Color</string>
+    <string name="corner_width">Corner Width (%d dp)</string>
+    <string name="corner_length">Corner Length (%d dp)</string>
+    <string name="grid_line_color">Gridline Color</string>
+    <string name="grid_line_width">Gridline Width (%d dp)</string>
+    <string name="drag_state">Drag States</string>
 </resources>

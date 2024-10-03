@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.crop.ActivityCrop">
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/mbBackCrop"
+        style="@style/Widget.Material3.Button.IconButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:icon="@drawable/ic_back"
+        app:iconTint="@android:color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/mtvWidthCrop"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="4dp"
+        android:background="@color/colorBackgroundSurface"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/mbBackCrop"
+        app:layout_constraintEnd_toStartOf="@+id/mtvHeightCrop"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/mbBackCrop"
+        tools:text="W 500" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/mtvHeightCrop"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="4dp"
+        android:background="@color/colorBackgroundSurface"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/mbBackCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/mtvWidthCrop"
+        app:layout_constraintTop_toTopOf="@+id/mbBackCrop"
+        tools:text="H 500" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/mbSaveCrop"
+        style="@style/Widget.Material3.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="@string/save"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <dev.pegasus.crop.CropView
+        android:id="@+id/crop_view"
+        android:layout_width="0dp"
+        android:layout_height="300dp"
+        android:layout_marginVertical="8dp"
+        app:cropBackgroundColor="@color/colorBackground"
+        app:cropCornerColor="?attr/colorPrimary"
+        app:cropCornerLength="24dp"
+        app:cropCornerWidth="4dp"
+        app:cropDraggingState="drag_all"
+        app:cropGridlineColor="@color/white"
+        app:cropGridlineWidth="1dp"
+        app:cropMargin="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mbBackCrop" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/crop_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/crop_view" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/mbRotateLeftCrop"
+        style="@style/Widget.Material3.Button.IconButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        app:icon="@drawable/ic_rotate_left"
+        app:iconTint="@android:color/black"
+        app:layout_constraintEnd_toStartOf="@id/mbRotateRightCrop"
+        app:layout_constraintTop_toTopOf="@+id/mbRotateRightCrop" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/mbRotateRightCrop"
+        style="@style/Widget.Material3.Button.IconButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        app:icon="@drawable/ic_rotate_right"
+        app:iconTint="@android:color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/crop_view" />
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mbRotateRightCrop">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:scrollbars="vertical">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:text="@string/aspect_ratios"
+                android:textAppearance="@style/TextAppearance.Material3.TitleLarge" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rcvListCrop"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:orientation="horizontal"
+                android:paddingVertical="8dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_aspect_ratio" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/mtvCornerLength"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:text="@string/corner_length"
+                android:textAppearance="@style/TextAppearance.Material3.TitleLarge" />
+
+            <com.google.android.material.slider.Slider
+                android:id="@+id/sliderCornerLength"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp"
+                android:valueFrom="0"
+                android:valueTo="100" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/mtvCornerWidth"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:text="@string/corner_width"
+                android:textAppearance="@style/TextAppearance.Material3.TitleLarge" />
+
+            <com.google.android.material.slider.Slider
+                android:id="@+id/sliderCornerWidth"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp"
+                android:valueFrom="0"
+                android:valueTo="100" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/mtvGridLineWidth"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:text="@string/corner_width"
+                android:textAppearance="@style/TextAppearance.Material3.TitleLarge" />
+
+            <com.google.android.material.slider.Slider
+                android:id="@+id/sliderGridLineWidth"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp"
+                android:valueFrom="0"
+                android:valueTo="100" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/mtvCornerColor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:text="@string/corner_color"
+                android:textAppearance="@style/TextAppearance.Material3.TitleLarge" />
+
+            <Spinner
+                android:id="@+id/spinnerCornerColor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/mtvGridlineColor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:text="@string/grid_line_color"
+                android:textAppearance="@style/TextAppearance.Material3.TitleLarge" />
+
+            <Spinner
+                android:id="@+id/spinnerGridlineColor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/mtvDragStateColor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:text="@string/drag_state"
+                android:textAppearance="@style/TextAppearance.Material3.TitleLarge" />
+
+            <Spinner
+                android:id="@+id/spinnerDragStateColor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginBottom="32dp" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

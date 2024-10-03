@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Crop overlay view-->
+    <dimen name="margin_max_crop_rect">24dp</dimen>
+    <dimen name="corner_toggle_width">6dp</dimen>
+    <dimen name="corner_toggle_length">32dp</dimen>
+    <dimen name="edge_toggle_length">48dp</dimen>
+    <dimen name="grid_line_width">1dp</dimen>
+    <dimen name="touch_threshold">16dp</dimen>
+    <dimen name="min_rect">56dp</dimen>
+</resources>
