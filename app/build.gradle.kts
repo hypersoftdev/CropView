@@ -41,8 +41,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":cropView"))
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -51,4 +49,8 @@ dependencies {
 
     // View Model Scope
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
+
+    // CropView Library
+    implementation(project(":cropView"))
+//    implementation 'com.github.hypersoftdev:CropView:1.0.2'
 }
