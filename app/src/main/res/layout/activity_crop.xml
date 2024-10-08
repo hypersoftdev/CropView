@@ -59,7 +59,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <dev.pegasus.crop.CropView
+    <com.hypersoft.crop.CropView
         android:id="@+id/crop_view"
         android:layout_width="0dp"
         android:layout_height="300dp"

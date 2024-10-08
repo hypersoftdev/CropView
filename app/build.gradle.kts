@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.sample.cropview"
+    namespace = "com.hypersoft.cropview"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.sample.cropview"
+        applicationId = "com.hypersoft.cropview"
         minSdk = 23
         targetSdk = 34
         versionCode = 1
@@ -47,10 +47,6 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
-
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
 
     // View Model Scope
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
