@@ -37,9 +37,9 @@ repositories {
 
 ### Step B: Add Dependencies
 
-In your app-level **build.gradle** file, add the library dependency. Use the latest version: 
+In your app-level **build.gradle** file, add the library dependency. Use the latest version: [![](https://jitpack.io/v/hypersoftdev/CropView.svg)](https://jitpack.io/#hypersoftdev/CropView)
 ```
-implementation 'com.hypersoft.cropview:x.x.x'
+ implementation 'com.github.hypersoftdev:CropView:x.x.x'
 ```
 
 ## Implementation
