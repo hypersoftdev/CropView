@@ -127,7 +127,7 @@ Contributions are welcome! Feel free to open issues or submit pull requests.
 
 This work would not have been possible without the invaluable contributions of [Sohaib Ahmed](https://github.com/epegasus). His expertise, dedication, and unwavering support have been instrumental in bringing this project to fruition.
 
-![screenshot](https://github.com/hypersoftdev/CropView/blob/master/screenshot/profile_image.JFIF?raw=true)
+![Profile](https://github.com/hypersoftdev/CropView/blob/master/screenshot/profile_image.jpg?raw=true)
 
 We are deeply grateful for [Sohaib Ahmed](https://github.com/epegasus) involvement and his belief in the importance of this work. His contributions have made a significant impact, and we are honored to have had the opportunity to collaborate with him.
 
