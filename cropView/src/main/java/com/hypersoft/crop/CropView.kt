@@ -419,6 +419,20 @@ class CropView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
         invalidate()
     }
 
+    // Flip Horizontally
+    fun setFlipHorizontally() {
+        bitmapMatrix.postScale(-1f, 1f, cropRect.centerX(), cropRect.centerY())
+        notifyCropRectChanged()
+        invalidate()
+    }
+
+    // Flip Vertically
+    fun setFlipVertically() {
+        bitmapMatrix.postScale(1f, -1f, cropRect.centerX(), cropRect.centerY())
+        notifyCropRectChanged()
+        invalidate()
+    }
+
     // Helper to rotate a RectF by a given angle
     private fun rotateRect(rect: RectF, angle: Float): AnimatableRectF {
         val matrix = Matrix()
