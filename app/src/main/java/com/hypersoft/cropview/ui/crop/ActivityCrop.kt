@@ -4,12 +4,12 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.RectF
-import android.net.Uri
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.core.net.toUri
 import com.hypersoft.crop.enums.AspectRatioType
 import com.hypersoft.crop.util.extensions.toDp
 import com.hypersoft.crop.util.extensions.toPx
@@ -37,17 +37,20 @@ class ActivityCrop : BaseActivity<ActivityCropBinding>(ActivityCropBinding::infl
         binding.mbSaveCrop.setOnClickListener { saveImage() }
         binding.mbRotateLeftCrop.setOnClickListener { binding.cropView.setCropRotation(-90f) }
         binding.mbRotateRightCrop.setOnClickListener { binding.cropView.setCropRotation(90f) }
+        binding.mbFlipHorizontallyCrop.setOnClickListener { binding.cropView.setFlipHorizontally() }
+        binding.mbFlipVerticallyCrop.setOnClickListener { binding.cropView.setFlipVertically() }
         binding.sliderCornerLength.addOnChangeListener { _, value, _ -> onCornerLengthSliderChange(value) }
         binding.sliderCornerWidth.addOnChangeListener { _, value, _ -> onCornerWidthSliderChange(value) }
         binding.sliderGridLineWidth.addOnChangeListener { _, value, _ -> onGridLineWidthSliderChange(value) }
     }
 
     private fun setUI() {
-        if (uriPath.isNullOrEmpty()) {
+        val path = uriPath
+        if (path.isNullOrEmpty()) {
             Toast.makeText(this, "Image not found", Toast.LENGTH_SHORT).show()
             return
         }
-        val uri = Uri.parse(uriPath)
+        val uri = path.toUri()
         viewModel.getBitmap(uri)
     }
 

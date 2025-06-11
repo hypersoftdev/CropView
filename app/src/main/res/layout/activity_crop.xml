@@ -86,6 +86,28 @@
         app:layout_constraintTop_toTopOf="@+id/crop_view" />
 
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/mbFlipHorizontallyCrop"
+        style="@style/Widget.Material3.Button.IconButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        app:icon="@drawable/ic_svg_flip_horizontally"
+        app:iconTint="@android:color/black"
+        app:layout_constraintEnd_toStartOf="@id/mbFlipVerticallyCrop"
+        app:layout_constraintTop_toTopOf="@+id/mbRotateRightCrop" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/mbFlipVerticallyCrop"
+        style="@style/Widget.Material3.Button.IconButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        app:icon="@drawable/ic_svg_flip_vertically"
+        app:iconTint="@android:color/black"
+        app:layout_constraintEnd_toStartOf="@id/mbRotateLeftCrop"
+        app:layout_constraintTop_toTopOf="@+id/mbRotateRightCrop" />
+
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/mbRotateLeftCrop"
         style="@style/Widget.Material3.Button.IconButton"
         android:layout_width="wrap_content"
