@@ -5,16 +5,14 @@ plugins {
 
 android {
     namespace = "com.hypersoft.cropview"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.hypersoft.cropview"
         minSdk = 23
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -52,5 +50,5 @@ dependencies {
 
     // CropView Library
     implementation(project(":cropView"))
-//    implementation 'com.github.hypersoftdev:CropView:1.0.2'
+    //implementation 'com.github.hypersoftdev:CropView:1.0.2'
 }

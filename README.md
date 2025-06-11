@@ -9,7 +9,7 @@ This repository hosts the `cropView` module, a customizable view for croppingima
 * Double tap focus
 * Pinch Zoom
 * Free Mode
-* Size Displayer
+* Size Displayed
 * Auto Centered
 * Animations
 * Customizable corner styles and colors

@@ -138,7 +138,7 @@ class ActivityCrop : BaseActivity<ActivityCropBinding>(ActivityCropBinding::infl
     }
 
     private fun saveImage() {
-        bitmap = binding.cropView.getCroppedData()
+        bitmap = binding.cropView.getCroppedImage()
         startActivity(Intent(this, ActivityResult::class.java))
     }
 

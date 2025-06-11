@@ -6,12 +6,10 @@ plugins {
 
 android {
     namespace = "com.hypersoft.crop"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 23
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -36,12 +34,6 @@ android {
 
 dependencies {
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
 
     // Exif (for rotation)
     implementation(libs.androidx.exifinterface)
@@ -53,7 +45,7 @@ publishing {
         create<MavenPublication>("release") {
             groupId = "com.hypersoft.cropview"
             artifactId = "cropview"
-            version = "1.0.1"
+            version = "1.0.3"
 
             afterEvaluate {
                 from(components["release"])
