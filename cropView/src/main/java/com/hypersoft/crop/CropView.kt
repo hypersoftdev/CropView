@@ -17,8 +17,8 @@ import android.view.MotionEvent.ACTION_UP
 import android.view.View
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.createBitmap
 import com.hypersoft.crop.customs.AnimatableRectF
-import com.hypersoft.crop.dataClasses.CroppedBitmapData
 import com.hypersoft.crop.enums.AspectMode
 import com.hypersoft.crop.enums.AspectMode.ASPECT
 import com.hypersoft.crop.enums.AspectMode.FREE
@@ -414,7 +414,7 @@ class CropView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
     fun setCropRotation(angle: Float) {
         rotationDegrees = (rotationDegrees + angle) % 360
         bitmapMatrix.postRotate(angle, cropRect.centerX(), cropRect.centerY())
-        //cropRect = rotateRect(cropRect, angle)
+        cropRect = rotateRect(cropRect, angle)
         notifyCropRectChanged()
         invalidate()
     }
@@ -432,9 +432,23 @@ class CropView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
         )
         matrix.mapPoints(points)
 
-        val newRect = AnimatableRectF()
-        newRect.set(points[0], points[1], points[4], points[5])
-        return newRect
+        var minX = Float.MAX_VALUE
+        var minY = Float.MAX_VALUE
+        var maxX = Float.MIN_VALUE
+        var maxY = Float.MIN_VALUE
+
+        for (i in points.indices step 2) {
+            val x = points[i]
+            val y = points[i + 1]
+            minX = minOf(minX, x)
+            minY = minOf(minY, y)
+            maxX = maxOf(maxX, x)
+            maxY = maxOf(maxY, y)
+        }
+
+        return AnimatableRectF().apply {
+            set(minX, minY, maxX, maxY)
+        }
     }
 
     /**
@@ -581,7 +595,7 @@ class CropView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
     /**
      * Get cropped bitmap.
      */
-    fun getCroppedData(): Bitmap? {
+    fun getCroppedImage(): Bitmap? {
         val croppedBitmapRect = getCropSizeOriginal()
 
         if (bitmapRect.intersect(croppedBitmapRect).not()) {
@@ -675,7 +689,7 @@ class CropView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
      * Create mask bitmap
      */
     private fun createMaskBitmap() {
-        maskBitmap = Bitmap.createBitmap(measuredWidth, measuredHeight, Bitmap.Config.ARGB_8888)
+        maskBitmap = createBitmap(measuredWidth, measuredHeight)
         maskCanvas = Canvas(maskBitmap!!)
     }
 
@@ -1087,7 +1101,7 @@ class CropView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
     }
 
     /**
-     * Calculates minimum possibel rectangle that user can drag
+     * Calculates minimum possible rectangle that user can drag
      * cropRect
      */
     private fun calculateMinRect() {
@@ -1516,7 +1530,7 @@ class CropView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
     }
 
     /**
-     * If user miminize the croprect, we need to
+     * If user minimize the crop-rect, we need to
      * calculate target centered rectangle according to
      * current cropRect aspect ratio and size. With this
      * target rectangle, we can animate crop rect to
@@ -1543,7 +1557,7 @@ class CropView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
      * When user change cropRect size by dragging it, cropRect
      * should be animated to center without changing aspect ratio,
      * meanwhile bitmap matrix should be take selected crop rect to
-     * the center. This methods take selected crop rect to the cennter.
+     * the center. This methods take selected crop rect to the center.
      */
     private fun animateBitmapToCenterTarget() {
         val newBitmapMatrix = bitmapMatrix.clone()
@@ -1563,7 +1577,7 @@ class CropView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
     }
 
     /**
-     * Animates current croprect to the center position
+     * Animates current crop-rect to the center position
      */
     private fun animateCropRectToCenterTarget() {
         cropRect.animateTo(targetRect) {
