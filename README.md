@@ -78,7 +78,7 @@ fun initCropView() = with(cropView) {
     onInitialized = {
         updatePixels(getCropSizeOriginal())
     }
-    observeCropViewResolution = {
+    observeCropRectOnOriginalBitmapChanged = {
         updatePixels(it)
     }
 }
