@@ -107,7 +107,7 @@ private fun updatePixels(rectF: RectF) {
     cropView.setCropCornerColor(Color.BLUE)
 
 ### Set Gridline Width (in Pixels):
-    cropView.onGridLineWidthSliderChange(value.toPx())
+    cropView.setGridlineWidth(value.toPx())
 
 ### Set Gridline Color:
     cropView.setGridlineColor(Color.WHITE)
